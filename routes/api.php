@@ -8,13 +8,21 @@ use App\Http\Resources\AuthUserResource;
 
 // API Routes
 Route::prefix('v1')->group(function () {
-    Route::post('/login', [ApiAuthController::class, 'login']);
-    Route::post('/register', [ApiAuthController::class, 'register']);
+    Route::controller(ApiAuthController::class)->group(function () {
+        Route::post('/login', 'login');
+        Route::post('/register', 'register');
+    });
+
     //---------Admin Routing----------
     Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/user', function (Request $request) {
             return new AuthUserResource($request->user());
         });
         Route::post('/logout', [ApiAuthController::class, 'logout']);
+        Route::get('/dropdown/{model}', [\App\Http\Controllers\DropdownController::class, 'getDropDown']);
+
+        Route::apiResources([
+            'transitions' => \App\Http\Controllers\TransitionController::class,
+        ]);
     });
 });
