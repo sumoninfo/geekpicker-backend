@@ -22,7 +22,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/dropdown/{model}', [\App\Http\Controllers\DropdownController::class, 'getDropDown']);
 
         Route::apiResources([
-            'transitions' => \App\Http\Controllers\TransitionController::class,
+            'transactions' => \App\Http\Controllers\TransactionController::class,
         ]);
     });
 });

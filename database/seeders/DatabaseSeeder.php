@@ -20,6 +20,6 @@ class DatabaseSeeder extends Seeder
             'email' => 'admin@gmail.com',
         ]);
 
-        \App\Models\User::factory(10)->create();
+        \App\Models\Transaction::factory(10)->create();
     }
 }

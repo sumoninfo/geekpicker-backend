@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTransitionsTable extends Migration
+class CreateTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,15 @@ class CreateTransitionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transitions', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->date('date');
             $table->foreignId('from_user_id')->index()->constrained('users')->onDelete('cascade');
             $table->foreignId('to_user_id')->index()->constrained('users')->onDelete('cascade');
             $table->string('from_currency', 3)->default("USD");
             $table->string('to_currency', 3)->default("USD");
-            $table->decimal('amount', 22)->default(0);
+            $table->decimal('from_amount', 22, 4)->default(0);
+            $table->decimal('to_amount', 22, 4)->default(0);
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CreateTransitionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transitions');
+        Schema::dropIfExists('transactions');
     }
 }

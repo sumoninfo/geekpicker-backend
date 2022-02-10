@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\DropdownResource;
+use App\Http\Resources\UserDropdownResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -35,7 +36,7 @@ class DropdownController extends Controller
         if ($request->filled('search')) {
             $query->whereLike(['name', 'email', 'phone'], $request->search);
         }
-        return DropdownResource::collection($query->get());
+        return UserDropdownResource::collection($query->get());
     }
 
     /**
