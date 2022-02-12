@@ -24,12 +24,8 @@ class TransactionController extends BaseController
      */
     public function index(Request $request)
     {
-        $query = Transaction::with('toUser');
-        if ($request->filled('search')) {
-            $query->whereLike(['toUser.name', 'toUser.email', 'toUser.phone', 'from_amount', 'to_amount'], $request->search);
-        }
-        $query = $query->latest()->paginate($request->get('per_page', config('constant.pagination')));
-        return TransactionResource::collection($query);
+        $transactions = (new TransactionService())->getAllTransaction($request);
+        return TransactionResource::collection($transactions);
     }
 
     /**

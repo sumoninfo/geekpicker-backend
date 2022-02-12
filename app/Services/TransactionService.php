@@ -10,6 +10,21 @@ use Illuminate\Support\Facades\Http;
 class TransactionService
 {
     /**
+     * get all transactions by auth user
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getAllTransaction(Request $request)
+    {
+        $query = auth()->user()->transactions()->with('toUser');
+        if ($request->filled('search')) {
+            $query->whereLike(['toUser.name', 'toUser.email', 'toUser.phone', 'from_amount', 'to_amount'], $request->search);
+        }
+        return $query->latest()->paginate($request->get('per_page', config('constant.pagination')));
+    }
+
+    /**
      * store transaction data
      *
      * @param Request $request
@@ -50,4 +65,6 @@ class TransactionService
         $from_currency_rate = $result['quotes']["USD{$from_currency}"];
         return ($to_currency_rate / $from_currency_rate) * $amount;
     }
+
+
 }

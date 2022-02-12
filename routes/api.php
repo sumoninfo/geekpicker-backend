@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,7 +24,12 @@ Route::prefix('v1')->group(function () {
         Route::get('/dropdown/{model}', [\App\Http\Controllers\DropdownController::class, 'getDropDown']);
 
         Route::apiResources([
-            'transactions' => \App\Http\Controllers\TransactionController::class,
+            'transactions' => TransactionController::class,
         ]);
+        Route::controller(ReportController::class)->prefix('reports')->group(function () {
+            Route::get('/total-amount-converted', 'totalAmountConverted');
+            Route::get('/third-highest-amount', 'thirdHighestAmountReport');
+            Route::get('/dashboard-data', 'dashboardData');
+         });
     });
 });
