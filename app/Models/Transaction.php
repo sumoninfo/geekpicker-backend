@@ -16,7 +16,16 @@ class Transaction extends Model
      *
      * @return BelongsTo
      */
-    public function toUser()
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'from_user_id', 'id');
+    }
+
+    /**
+     *
+     * @return BelongsTo
+     */
+    public function toUser(): BelongsTo
     {
         return $this->belongsTo(User::class, 'to_user_id', 'id');
     }

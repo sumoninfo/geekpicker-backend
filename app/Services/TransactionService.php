@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Transaction;
 use App\Models\User;
+use App\Notifications\TransactionConfirmation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -33,17 +34,20 @@ class TransactionService
     public function storeTransaction(Request $request)
     {
         $to_user                    = User::find($request->user['id']);
-        $auth_user                  = auth()->user();
+        $user                       = auth()->user();
         $transaction                = new Transaction();
         $transaction->date          = $request->date;
-        $transaction->from_user_id  = $auth_user->id;
+        $transaction->from_user_id  = $user->id;
         $transaction->to_user_id    = $to_user->id;
-        $transaction->from_currency = $auth_user->currency;
+        $transaction->from_currency = $user->currency;
         $transaction->to_currency   = $to_user->currency;
         $transaction->from_amount   = $request->amount;
         $transaction->to_amount     =
-            $this->getAmountFromCurrencyCalculation($auth_user->currency, $to_user->currency, $request->amount);
+            $this->getAmountFromCurrencyCalculation($user->currency, $to_user->currency, $request->amount);
         $transaction->save();
+        //TransactionConfirmation notify
+        $user->notify(new TransactionConfirmation($transaction));
+        // (new TransactionConfirmation($transaction))->toMail($transaction->user);
         return $transaction;
     }
 
