@@ -8,6 +8,7 @@ use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Services\TransactionService;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
@@ -44,6 +45,9 @@ class TransactionController extends BaseController
             $transaction = (new TransactionService())->storeTransaction($request);
             DB::commit();
             return $this->returnResponse("success", "Created successfully", new TransactionResource($transaction));
+        } catch (QueryException $e) {
+            DB::rollback();
+            return $this->returnResponse("error", $e->getMessage(), '', 502);
         } catch (\Exception $e) {
             DB::rollback();
             return $this->returnResponse("error", $e->getMessage(), '', $e->getCode());

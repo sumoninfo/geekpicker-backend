@@ -17,10 +17,10 @@ class TransactionService
      */
     public function storeTransaction(Request $request)
     {
-        $to_user     = User::find($request->user['id']);
-        $auth_user   = auth()->user();
-        $transaction = new Transaction();
-        $transaction->fill($request->all());
+        $to_user                    = User::find($request->user['id']);
+        $auth_user                  = auth()->user();
+        $transaction                = new Transaction();
+        $transaction->date          = $request->date;
         $transaction->from_user_id  = $auth_user->id;
         $transaction->to_user_id    = $to_user->id;
         $transaction->from_currency = $auth_user->currency;
@@ -48,6 +48,6 @@ class TransactionService
         $result             = $res->json();
         $to_currency_rate   = $result['quotes']["USD{$to_currency}"];
         $from_currency_rate = $result['quotes']["USD{$from_currency}"];
-        return number_format(($to_currency_rate / $from_currency_rate) * $amount, 4);
+        return ($to_currency_rate / $from_currency_rate) * $amount;
     }
 }
