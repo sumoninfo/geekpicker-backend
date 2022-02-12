@@ -15,11 +15,19 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         User::factory()->create([
-            'name'  => "Admin",
-            'phone' => "01720425485",
-            'email' => 'admin@gmail.com',
+            'name'     => "User 1",
+            'phone'    => "017XXXXXXXX",
+            'email'    => 'user1@gmail.com',
+            'currency' => 'USD'
         ]);
 
-        \App\Models\Transaction::factory(10)->create();
+        User::factory()->create([
+            'name'     => "User 2",
+            'phone'    => "017XXXXXXXX",
+            'email'    => 'user2@gmail.com',
+            'currency' => 'BDT'
+        ]);
+
+        //\App\Models\Transaction::factory(10)->create();
     }
 }

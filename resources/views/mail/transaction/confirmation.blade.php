@@ -4,7 +4,7 @@
 Transaction Confirmation notify description
 
 Date: {{ $transaction->date }}<br>
-Account holder name: {{ $transaction->toUser->name }}
+Account holder: {{ $transaction->toUser->name }}
 
 # FROM
 Currency: {{ $transaction->from_currency }}<br>
